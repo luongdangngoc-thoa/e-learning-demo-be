@@ -1,6 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { SUPABASE_KEY, SUPABASE_URL } from "./constants";
+import { SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL } from "./constants";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -9,7 +9,7 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_KEY, {
+  const supabase = createServerClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     cookies: {
       get(name: string) {
         return request.cookies.get(name)?.value;
