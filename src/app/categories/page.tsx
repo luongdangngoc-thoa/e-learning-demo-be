@@ -12,6 +12,8 @@ export default function CategoryList() {
       {
         field: 'id',
         headerName: 'ID',
+        headerAlign: 'center',
+        align: 'center',
         type: 'number',
         minWidth: 50
       },
@@ -19,7 +21,15 @@ export default function CategoryList() {
         field: 'title',
         flex: 1,
         headerName: 'Title',
-        minWidth: 200
+        minWidth: 50,
+        maxWidth: 200
+      },
+      {
+        field: 'description',
+        flex: 1,
+        headerName: 'Description',
+        minWidth: 300,
+        maxWidth: 1000
       },
       {
         field: 'actions',
