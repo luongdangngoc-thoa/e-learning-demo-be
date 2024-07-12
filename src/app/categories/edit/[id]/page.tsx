@@ -1,37 +1,33 @@
-"use client";
+'use client'
 
-import { Box, TextField } from "@mui/material";
-import { Edit } from "@refinedev/mui";
-import { useForm } from "@refinedev/react-hook-form";
+import { Box, TextField } from '@mui/material'
+import { Edit } from '@refinedev/mui'
+import { useForm } from '@refinedev/react-hook-form'
 
 export default function CategoryEdit() {
   const {
     saveButtonProps,
     register,
-    formState: { errors },
-  } = useForm({});
+    formState: { errors }
+  } = useForm({})
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column" }}
-        autoComplete="off"
-      >
+      <Box component='form' sx={{ display: 'flex', flexDirection: 'column' }} autoComplete='off'>
         <TextField
-          {...register("title", {
-            required: "This field is required",
+          {...register('title', {
+            required: 'This field is required'
           })}
           error={!!(errors as any)?.title}
           helperText={(errors as any)?.title?.message}
-          margin="normal"
+          margin='normal'
           fullWidth
           InputLabelProps={{ shrink: true }}
-          type="text"
-          label={"Title"}
-          name="title"
+          type='text'
+          label={'Title'}
+          name='title'
         />
       </Box>
     </Edit>
-  );
+  )
 }

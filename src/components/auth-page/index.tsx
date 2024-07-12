@@ -1,6 +1,6 @@
-"use client";
-import type { AuthPageProps } from "@refinedev/core";
-import { AuthPage as AuthPageBase } from "@refinedev/mui";
+'use client'
+import type { AuthPageProps } from '@refinedev/core'
+import { AuthPage as AuthPageBase } from '@refinedev/mui'
 
 export const AuthPage = (props: AuthPageProps) => {
   return (
@@ -8,10 +8,10 @@ export const AuthPage = (props: AuthPageProps) => {
       {...props}
       formProps={{
         defaultValues: {
-          email: "info@refine.dev",
-          password: "refine-supabase",
-        },
+          email: 'info@refine.dev',
+          password: 'refine-supabase'
+        }
       }}
     />
-  );
-};
+  )
+}

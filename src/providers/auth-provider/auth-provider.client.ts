@@ -1,143 +1,141 @@
-"use client";
+'use client'
 
-import type { AuthProvider } from "@refinedev/core";
-import { supabaseBrowserClient } from "@utils/supabase/client";
+import type { AuthProvider } from '@refinedev/core'
+import { supabaseBrowserClient } from '@utils/supabase/client'
 
 export const authProviderClient: AuthProvider = {
   login: async ({ email, password }) => {
-    const { data, error } = await supabaseBrowserClient.auth.signInWithPassword(
-      {
-        email,
-        password,
-      }
-    );
+    const { data, error } = await supabaseBrowserClient.auth.signInWithPassword({
+      email,
+      password
+    })
 
     if (error) {
       return {
         success: false,
-        error,
-      };
+        error
+      }
     }
 
     if (data?.session) {
-      await supabaseBrowserClient.auth.setSession(data.session);
+      await supabaseBrowserClient.auth.setSession(data.session)
 
       return {
         success: true,
-        redirectTo: "/",
-      };
+        redirectTo: '/'
+      }
     }
 
     // for third-party login
     return {
       success: false,
       error: {
-        name: "LoginError",
-        message: "Invalid username or password",
-      },
-    };
+        name: 'LoginError',
+        message: 'Invalid username or password'
+      }
+    }
   },
   logout: async () => {
-    const { error } = await supabaseBrowserClient.auth.signOut();
+    const { error } = await supabaseBrowserClient.auth.signOut()
 
     if (error) {
       return {
         success: false,
-        error,
-      };
+        error
+      }
     }
 
     return {
       success: true,
-      redirectTo: "/login",
-    };
+      redirectTo: '/login'
+    }
   },
   register: async ({ email, password }) => {
     try {
       const { data, error } = await supabaseBrowserClient.auth.signUp({
         email,
-        password,
-      });
+        password
+      })
 
       if (error) {
         return {
           success: false,
-          error,
-        };
+          error
+        }
       }
 
       if (data) {
         return {
           success: true,
-          redirectTo: "/",
-        };
+          redirectTo: '/'
+        }
       }
     } catch (error: any) {
       return {
         success: false,
-        error,
-      };
+        error
+      }
     }
 
     return {
       success: false,
       error: {
-        message: "Register failed",
-        name: "Invalid email or password",
-      },
-    };
+        message: 'Register failed',
+        name: 'Invalid email or password'
+      }
+    }
   },
   check: async () => {
-    const { data, error } = await supabaseBrowserClient.auth.getUser();
-    const { user } = data;
+    const { data, error } = await supabaseBrowserClient.auth.getUser()
+    const { user } = data
 
     if (error) {
       return {
         authenticated: false,
-        redirectTo: "/login",
-        logout: true,
-      };
+        redirectTo: '/login',
+        logout: true
+      }
     }
 
     if (user) {
       return {
-        authenticated: true,
-      };
+        authenticated: true
+      }
     }
 
     return {
       authenticated: false,
-      redirectTo: "/login",
-    };
+      redirectTo: '/login'
+    }
   },
   getPermissions: async () => {
-    const user = await supabaseBrowserClient.auth.getUser();
+    const user = await supabaseBrowserClient.auth.getUser()
 
     if (user) {
-      return user.data.user?.role;
+      return user.data.user?.role
     }
 
-    return null;
+    return null
   },
   getIdentity: async () => {
-    const { data } = await supabaseBrowserClient.auth.getUser();
+    const { data } = await supabaseBrowserClient.auth.getUser()
 
     if (data?.user) {
       return {
         ...data.user,
-        name: data.user.email,
-      };
+        name: data.user.email
+      }
     }
 
-    return null;
+    return null
   },
   onError: async (error) => {
-    if (error?.code === "PGRST301" || error?.code === 401) {
+    if (error?.code === 'PGRST301' || error?.code === 401) {
       return {
-        logout: true,
-      };
+        logout: true
+      }
     }
 
-    return { error };
-  },
-};
+    return { error }
+  }
+}
