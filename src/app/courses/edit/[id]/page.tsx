@@ -254,18 +254,36 @@ export default function CourseEdit() {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            <FormControlLabel
-              control={<Switch name='has_access_all_device' defaultChecked />}
-              label='Has access all device'
+            <Controller
+              control={control}
+              name='has_access_all_device'
+              defaultValue={false}
+              render={({ field }) => (
+                <FormControlLabel control={<Switch {...field} checked={field.value} />} label='Has access all device' />
+              )}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <FormControlLabel control={<Switch name='has_certification' defaultChecked />} label='Has certification' />
+            <Controller
+              control={control}
+              name='has_certification'
+              defaultValue={false}
+              render={({ field }) => (
+                <FormControlLabel control={<Switch {...field} checked={field.value} />} label='Has certification' />
+              )}
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <FormControlLabel
-              control={<Switch name='has_money_back_guarantee' defaultChecked />}
-              label='Has money back guarantee'
+            <Controller
+              control={control}
+              name='has_money_back_guarantee'
+              defaultValue={false}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={<Switch {...field} checked={field.value} />}
+                  label='Has money back guarantee'
+                />
+              )}
             />
           </Grid>
 

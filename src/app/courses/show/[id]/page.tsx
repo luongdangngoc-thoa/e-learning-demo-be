@@ -4,7 +4,7 @@ import { Box, FormControlLabel, Grid, Stack, Switch, Typography } from '@mui/mat
 import { useOne, useShow } from '@refinedev/core'
 import { Show, TextFieldComponent as TextField } from '@refinedev/mui'
 
-export default function CategoryShow() {
+export default function CourseShow() {
   const { queryResult } = useShow({
     meta: {
       select: '*, categories(id,title)'
@@ -91,24 +91,21 @@ export default function CategoryShow() {
             <Typography variant='body1' fontWeight='bold'>
               {'Has access all device'}
             </Typography>
-            <FormControlLabel
-              control={<Switch name='has_access_all_device' value={record?.has_access_all_device} disabled />}
-              label=''
-            />
+            <FormControlLabel control={<Switch checked={record?.has_access_all_device} disabled />} label='' />
           </Grid>
 
           <Grid item xs={12}>
             <Typography variant='body1' fontWeight='bold'>
               {'Has certification'}
             </Typography>
-            <FormControlLabel control={<Switch name='has_certification' defaultChecked disabled />} label='' />
+            <FormControlLabel control={<Switch checked={record?.has_certification} disabled />} label='' />
           </Grid>
 
           <Grid item xs={12}>
             <Typography variant='body1' fontWeight='bold'>
               {'Has money back guarantee'}
             </Typography>
-            <FormControlLabel control={<Switch name='has_money_back_guarantee' defaultChecked disabled />} label='' />
+            <FormControlLabel control={<Switch checked={record?.has_money_back_guarantee} disabled />} label='' />
           </Grid>
 
           <Grid item xs={12}>
