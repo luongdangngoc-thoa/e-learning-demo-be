@@ -29,7 +29,7 @@ export default function RootLayout({
 
   return (
     <html lang='en'>
-      <body>
+      <body suppressHydrationWarning>
         <Suspense>
           <GitHubBanner />
           <RefineKbarProvider>
@@ -58,6 +58,16 @@ export default function RootLayout({
                         create: '/categories/create',
                         edit: '/categories/edit/:id',
                         show: '/categories/show/:id',
+                        meta: {
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'courses',
+                        list: '/courses',
+                        create: '/courses/create',
+                        edit: '/courses/edit/:id',
+                        show: '/courses/show/:id',
                         meta: {
                           canDelete: true
                         }
