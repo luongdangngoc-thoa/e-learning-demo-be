@@ -14,17 +14,19 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { Create, useAutocomplete } from '@refinedev/mui'
+import { Edit, useAutocomplete } from '@refinedev/mui'
 import { useForm } from '@refinedev/react-hook-form'
-import { supabaseBrowserClient } from '@utils/supabase/client'
+import { supabaseBrowserClient } from '@shared/utils/supabase/client'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 export default function CourseEdit() {
   const [isUploadLoading, setIsUploadLoading] = useState(false)
+  const [fileError, setFileError] = useState('')
   const [userId, setUserId] = useState('')
 
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,31 +65,27 @@ export default function CourseEdit() {
       const target = event.target
       const file: File = (target.files as FileList)[0]
 
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+      if (!allowedTypes.includes(file.type)) {
+        setFileError('Only image files (jpeg, png, gif) are allowed.')
+        setIsUploadLoading(false)
+        return
+      } else {
+        setFileError('')
+      }
+
       formData.append('file', file)
 
-      // const res = await axios.post<{ url: string }>(`${apiUrl}/media/upload`, formData, {
-      //   withCredentials: false,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*'
-      //   }
-      // })
+      const res = await axios.post(`${apiUrl}/upload`, formData, {
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
 
-      const bannerUrl = 'https://picsum.photos/500/200'
-
-      // const { name, size, type, lastModified } = file
-
-      // const imagePaylod = [
-      //   {
-      //     name,
-      //     size,
-      //     type,
-      //     lastModified,
-      //     url: res.data.url
-      //   }
-      // ]
+      const bannerUrl = res.data.data.url
 
       setValue('banner', bannerUrl, { shouldValidate: true })
-
       setIsUploadLoading(false)
     } catch (error) {
       setError('banner', { message: 'Upload failed. Please try again.' })
@@ -102,7 +100,7 @@ export default function CourseEdit() {
   }, [userId, setValue])
 
   return (
-    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box component='form' sx={{ display: 'flex', flexDirection: 'column' }} autoComplete='off'>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -158,7 +156,6 @@ export default function CourseEdit() {
               control={control}
               name={'category_id'}
               rules={{ required: 'This field is required' }}
-              // eslint-disable-next-line
               defaultValue={null as any}
               render={({ field }) => (
                 <Autocomplete
@@ -329,6 +326,6 @@ export default function CourseEdit() {
           </Grid>
         </Grid>
       </Box>
-    </Create>
+    </Edit>
   )
 }

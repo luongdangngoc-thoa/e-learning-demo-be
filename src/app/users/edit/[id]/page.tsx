@@ -3,7 +3,7 @@
 import FileUploadIcon from '@mui/icons-material/FileUpload'
 import { LoadingButton } from '@mui/lab'
 import { Box, Grid, Input, Stack, TextField, Typography } from '@mui/material'
-import { Create } from '@refinedev/mui'
+import { Edit } from '@refinedev/mui'
 import { useForm } from '@refinedev/react-hook-form'
 import React, { useState } from 'react'
 
@@ -65,7 +65,7 @@ export default function UserEdit() {
   }
 
   return (
-    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box component='form' sx={{ display: 'flex', flexDirection: 'column' }} autoComplete='off'>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -143,6 +143,6 @@ export default function UserEdit() {
           </Grid>
         </Grid>
       </Box>
-    </Create>
+    </Edit>
   )
 }

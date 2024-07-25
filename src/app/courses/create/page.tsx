@@ -16,15 +16,17 @@ import {
 } from '@mui/material'
 import { Create, useAutocomplete } from '@refinedev/mui'
 import { useForm } from '@refinedev/react-hook-form'
-import { supabaseBrowserClient } from '@utils/supabase/client'
+import { supabaseBrowserClient } from '@shared/utils/supabase/client'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 
 export default function CourseCreate() {
   const [isUploadLoading, setIsUploadLoading] = useState(false)
+  const [fileError, setFileError] = useState('')
   const [userId, setUserId] = useState('')
 
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,31 +65,27 @@ export default function CourseCreate() {
       const target = event.target
       const file: File = (target.files as FileList)[0]
 
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+      if (!allowedTypes.includes(file.type)) {
+        setFileError('Only image files (jpeg, png, gif) are allowed.')
+        setIsUploadLoading(false)
+        return
+      } else {
+        setFileError('')
+      }
+
       formData.append('file', file)
 
-      // const res = await axios.post<{ url: string }>(`${apiUrl}/media/upload`, formData, {
-      //   withCredentials: false,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*'
-      //   }
-      // })
+      const res = await axios.post(`${apiUrl}/media/upload`, formData, {
+        withCredentials: false,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
 
-      const bannerUrl = 'https://picsum.photos/500/200'
-
-      // const { name, size, type, lastModified } = file
-
-      // const imagePaylod = [
-      //   {
-      //     name,
-      //     size,
-      //     type,
-      //     lastModified,
-      //     url: res.data.url
-      //   }
-      // ]
+      const bannerUrl = res.data.data.url
 
       setValue('banner', bannerUrl, { shouldValidate: true })
-
       setIsUploadLoading(false)
     } catch (error) {
       setError('banner', { message: 'Upload failed. Please try again.' })
@@ -293,6 +291,11 @@ export default function CourseCreate() {
                 {errors.banner && (
                   <Typography variant='caption' color='#fa541c'>
                     {errors.banner?.message?.toString()}
+                  </Typography>
+                )}
+                {fileError && (
+                  <Typography variant='caption' color='#fa541c'>
+                    {fileError}
                   </Typography>
                 )}
               </label>

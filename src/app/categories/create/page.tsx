@@ -5,12 +5,14 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Input, Stack, TextField, Typography } from '@mui/material'
 import { Create } from '@refinedev/mui'
 import { useForm } from '@refinedev/react-hook-form'
+import axios from 'axios'
 import React, { useState } from 'react'
 
 export default function CategoryCreate() {
   const [isUploadLoading, setIsUploadLoading] = useState(false)
+  const [fileError, setFileError] = useState('')
 
-  // const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ''
 
   const {
     saveButtonProps,
@@ -29,35 +31,30 @@ export default function CategoryCreate() {
       setIsUploadLoading(true)
 
       const formData = new FormData()
-
       const target = event.target
       const file: File = (target.files as FileList)[0]
 
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+      if (!allowedTypes.includes(file.type)) {
+        setFileError('Only image files (jpeg, png, gif) are allowed.')
+        setIsUploadLoading(false)
+        return
+      } else {
+        setFileError('')
+      }
+
       formData.append('file', file)
 
-      // const res = await axios.post<{ url: string }>(`${apiUrl}/media/upload`, formData, {
-      //   withCredentials: false,
-      //   headers: {
-      //     'Access-Control-Allow-Origin': '*'
-      //   }
-      // })
+      const res = await axios.post(`${apiUrl}/upload`, formData, {
+        withCredentials: false,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
 
-      const logoUrl = 'https://picsum.photos/200'
-
-      // const { name, size, type, lastModified } = file
-
-      // const imagePaylod = [
-      //   {
-      //     name,
-      //     size,
-      //     type,
-      //     lastModified,
-      //     url: res.data.url
-      //   }
-      // ]
+      const logoUrl = res.data.data.url
 
       setValue('logo', logoUrl, { shouldValidate: true })
-
       setIsUploadLoading(false)
     } catch (error) {
       setError('logo', { message: 'Upload failed. Please try again.' })
@@ -117,6 +114,11 @@ export default function CategoryCreate() {
             {errors.logo && (
               <Typography variant='caption' color='#fa541c'>
                 {errors.logo?.message?.toString()}
+              </Typography>
+            )}
+            {fileError && (
+              <Typography variant='caption' color='#fa541c'>
+                {fileError}
               </Typography>
             )}
           </label>
