@@ -1,4 +1,8 @@
 import { ColorModeContextProvider } from '@contexts/color-mode'
+import ArticleIcon from '@mui/icons-material/Article'
+import CategoryIcon from '@mui/icons-material/Category'
+import PeopleIcon from '@mui/icons-material/People'
+import SourceIcon from '@mui/icons-material/Source'
 import { authProviderClient } from '@providers/auth-provider'
 import { dataProvider } from '@providers/data-provider'
 import { DevtoolsProvider } from '@providers/devtools'
@@ -42,16 +46,6 @@ export default function RootLayout({
                     dataProvider={dataProvider}
                     notificationProvider={notificationProvider}
                     resources={[
-                      // {
-                      //   name: 'blog_posts',
-                      //   list: '/blog-posts',
-                      //   create: '/blog-posts/create',
-                      //   edit: '/blog-posts/edit/:id',
-                      //   show: '/blog-posts/show/:id',
-                      //   meta: {
-                      //     canDelete: true
-                      //   }
-                      // },
                       {
                         name: 'categories',
                         list: '/categories',
@@ -59,6 +53,7 @@ export default function RootLayout({
                         edit: '/categories/edit/:id',
                         show: '/categories/show/:id',
                         meta: {
+                          icon: <CategoryIcon />,
                           canDelete: true
                         }
                       },
@@ -69,6 +64,18 @@ export default function RootLayout({
                         edit: '/courses/edit/:id',
                         show: '/courses/show/:id',
                         meta: {
+                          icon: <SourceIcon />,
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'blogs',
+                        list: '/blogs',
+                        create: '/blogs/create',
+                        edit: '/blogs/edit/:id',
+                        show: '/blogs/show/:id',
+                        meta: {
+                          icon: <ArticleIcon />,
                           canDelete: true
                         }
                       },
@@ -79,6 +86,7 @@ export default function RootLayout({
                         edit: '/users/edit/:id',
                         show: '/users/show/:id',
                         meta: {
+                          icon: <PeopleIcon />,
                           canDelete: true
                         }
                       }
